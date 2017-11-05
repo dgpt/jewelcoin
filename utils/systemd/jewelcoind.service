@@ -1,0 +1,17 @@
+[Unit]
+Description=JewelCoin Full Node
+After=network.target
+
+[Service]
+User=jewelcoin
+Group=jewelcoin
+WorkingDirectory=~
+
+Type=forking
+PIDFile=/var/run/jewelcoind.pid
+
+ExecStart=/usr/bin/jewelcoind --config-file /etc/jewelcoind.conf \
+    --detach --pidfile /var/run/jewelcoind.pid
+
+[Install]
+WantedBy=multi-user.target
