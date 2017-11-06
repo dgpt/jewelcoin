@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:17.10
 
 ENV SRC_DIR /usr/local/src/jewelcoin
 
@@ -8,17 +8,22 @@ RUN set -x \
       cmake \
       g++ \
       git \
-      libboost1.58-all-dev \
+      libboost-all-dev \
       libssl-dev \
       make \
       pkg-config \
+      libzmq3-dev \
   ' \
   && apt-get -qq update \
   && apt-get -qq --no-install-recommends install $buildDeps
 
-RUN git clone https://github.com/dgpt/jewelcoin-monero $SRC_DIR
+RUN git clone https://github.com/dgpt/jewelcoin $SRC_DIR
 WORKDIR $SRC_DIR
-RUN make -j$(nproc) release-static
+
+# TODO: static is failing locally
+# is this necessary?
+#RUN make -j$(nproc) release-static
+RUN make
 
 RUN cp build/release/bin/* /usr/local/bin/ \
   \
